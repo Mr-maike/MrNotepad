@@ -1,9 +1,20 @@
 import os
 from tkinter import *
-import tkinter
+import tkinter.filedialog
+
+class Commands:
+  def saveas():
+    global text
+    t = text.get('1.0', 'end-1c')
+    savelocation = tkinter.filedialog.asksaveasfilename()
+    file1 = open(savelocation, "w+")
+    file1.write(t)
+    file1.close()
 
 root = Tk()
-root.geometry('1200x800')
+text = Text(root)
+text.grid()
+#root.geometry('1200x800')
 root.title('MrNotepad - Editor de Texto')
 
 menubar = Menu(root)
@@ -11,7 +22,7 @@ filemenu = Menu(menubar, tearoff=False)
 filemenu.add_command(label='New')
 filemenu.add_command(label='Open')
 filemenu.add_command(label='Save')
-filemenu.add_command(label='Save as...')
+filemenu.add_command(label='Save as...', command=Commands.saveas)
 
 filemenu.add_separator()
 
