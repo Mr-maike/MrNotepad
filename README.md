@@ -9,6 +9,10 @@
   <a href="#">License</a>
 </p>
 
+<p align=center style='padding-top:5px'>
+  <img height=20 src='https://img.shields.io/pypi/pyversions/Tk?style=for-the-badge' />
+  <img height=20 src='https://img.shields.io/github/license/Mr-maike/MrNotepad?color=yellow&style=for-the-badge'>
+</p>
 ## :computer: Project
 Simple Text Editor using Tkinter
 
@@ -26,3 +30,7 @@ Simple Text Editor using Tkinter
 ## :page_facing_up: License
 
 This project is under the MIT license. See the [LICENSE](LICENSE) file for more information.
+
+## :busts_in_silhouette: How to contribute
+
+:construction: Work in progress
