@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+import os
 from tkinter import *
 import tkinter.filedialog
 
@@ -30,11 +32,6 @@ class MrNotepad:
   def new_file(self):
     self.textarea.delete(1.0, tkinter.END)
     self.filename = None
-    ans = tkinter.messagebox.askquestion(title="Save File" , message="Would you like to save this file?")
-
-    if ans is True:
-      print('Salvo')
-
     self.set_window()
 
   def open_file(self):
@@ -45,9 +42,17 @@ class MrNotepad:
     
     if self.filename:
       self.textarea.delete(1.0, tkinter.END)
-      with open(self.filename, 'r') as fr:
-        self.textarea.insert(1.0, fr.read())
-      self.set_window(self.filename)
+      try:
+        with open(self.filename, 'r') as fr:
+          self.textarea.insert(1.0, fr.read())
+      except FileNotFoundError:
+        return
+      except:
+        return
+      self.set_window(os.path.basename(self.filename))
+
+  def exit_program():
+    pass 
 
 class Menubar:
   def __init__(self, parent):
