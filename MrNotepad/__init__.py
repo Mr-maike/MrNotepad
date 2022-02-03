@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+from msilib.schema import Icon
 import os
 from tkinter import *
 import tkinter.filedialog
@@ -50,9 +51,28 @@ class MrNotepad:
       except:
         return
       self.set_window(os.path.basename(self.filename))
+  
+  def save_as(self):
+    try:
+        new_file = tkinter.filedialog.asksaveasfilename(
+                initialfile="Untitled.txt",
+                defaultextension=".txt",
+                filetypes=[("All Files", "*.*"),
+                           ("Text Files", "*.txt")])
+        textarea_content = self.textarea.get(1.0, tkinter.END)
+        with open(new_file, "w", encoding='utf-8') as f:
+            f.write(textarea_content)
+        self.filename = new_file
+        self.set_window(os.path.basename(self.filename))
+    except:
+      return
+  
+  def exit_program(self):
+    self.answer = tkinter.messagebox.askquestion('Quit','Do you Really Want to Quit?', icon='error')
 
-  def exit_program():
-    pass 
+    if (self.answer):
+        quit()
+        #print('End!')
 
 class Menubar:
   def __init__(self, parent):
@@ -64,10 +84,10 @@ class Menubar:
     filemenu.add_command(label='New file', accelerator='Ctrl+N', underline=0, command=parent.new_file)
     filemenu.add_command(label='Open file', accelerator='Ctrl+O', underline=0, command=parent.open_file)
     filemenu.add_command(label='Save', accelerator='Ctrl+S', underline=0)
-    filemenu.add_command(label='Save As...', accelerator='Ctrl+Shift+S', underline=1)
+    filemenu.add_command(label='Save As...', accelerator='Ctrl+Shift+S', underline=1, command=parent.save_as)
     filemenu.add_command(label='Rename', accelerator='Ctrl+Shift+R', underline=0)
     filemenu.add_separator()
-    filemenu.add_command(label='Exit', accelerator='Alt+F4')
+    filemenu.add_command(label='Exit', accelerator='Alt+F4', command=parent.exit_program)
 
     menubar.add_cascade(label='File', menu=filemenu)
 
