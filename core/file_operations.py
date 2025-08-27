@@ -10,26 +10,37 @@ class FileOperations:
         self.is_modified = False
         
     def set_modified(self, modified):
-        """Define o estado de modificação do arquivo"""
+        #Define o estado de modificação do arquivo"""
         self.is_modified = modified
         self._update_display()
         
     def _update_display(self):
-        """Atualiza a exibição com base no estado atual"""
+        #Atualiza a exibição com base no estado atual - CORRIGIDO"""
         name = os.path.basename(self.filename) if self.filename else 'Untitled'
-        self.app.update_title(name, self.is_modified)
         
+        # CORREÇÃO: Usar o TabManager para atualizar o título
+        current_tab = self.app.tab_manager.current_tab
+        if current_tab:
+            # Atualiza a aba atual
+            self.app.tab_manager.update_tab_title(current_tab, self.filename, self.is_modified)
+        else:
+            # Fallback: atualiza o título da janela diretamente
+            if self.is_modified:
+                name += '*'
+            self.app.root.title(f'{name} - MrNotepad')
+            
     def new_file(self):
-        """Cria um novo arquivo"""
+        #Cria um novo arquivo
         if self._check_save():
-            self.app.clear_text()
+            # CORREÇÃO: Usar o TabManager para criar nova aba
+            self.app.tab_manager.add_new_tab()
             self.filename = None
             self.is_modified = False
             self._update_display()
             self.app.update_status('New file created')
             
     def open_file(self):
-        """Abre um arquivo existente"""
+        #Abre um arquivo existente
         if self._check_save():
             filename = filedialog.askopenfilename(
                 defaultextension='.txt',
@@ -47,15 +58,20 @@ class FileOperations:
                 self._load_file(filename)
                 
     def _load_file(self, filename):
-        """Carrega o conteúdo de um arquivo"""
+        #Carrega o conteúdo de um arquivo - CORRIGIDO
         try:
             with open(filename, 'r', encoding='utf-8') as file:
                 content = file.read()
                 
-            self.app.set_text_content(content)
+            # CORREÇÃO: Usar o TabManager para criar aba com conteúdo
+            tab_id = self.app.tab_manager.add_new_tab(filename, content)
+            
+            # Atualiza o filename e estado
             self.filename = filename
             self.is_modified = False
-            self._update_display()
+            
+            # Atualiza a aba
+            self.app.tab_manager.update_tab_title(tab_id, filename, False)
             self.app.update_status(f'Opened: {os.path.basename(filename)}')
             
         except UnicodeDecodeError:
@@ -63,10 +79,13 @@ class FileOperations:
             try:
                 with open(filename, 'r', encoding='latin-1') as file:
                     content = file.read()
-                self.app.set_text_content(content)
+                
+                # CORREÇÃO: Usar o TabManager
+                tab_id = self.app.tab_manager.add_new_tab(filename, content)
+                
                 self.filename = filename
                 self.is_modified = False
-                self._update_display()
+                self.app.tab_manager.update_tab_title(tab_id, filename, False)
                 self.app.update_status(f'Opened: {os.path.basename(filename)}')
             except Exception as e:
                 messagebox.showerror('Error', f'Could not open file: {e}')
@@ -75,14 +94,17 @@ class FileOperations:
             messagebox.showerror('Error', f'Could not open file: {e}')
             
     def save_file(self):
-        """Salva o arquivo atual"""
-        if self.filename:
+        #Salva o arquivo atual - CORRIGIDO
+        # CORREÇÃO: Obter filename da aba atual
+        current_tab = self.app.tab_manager.get_current_tab()
+        if current_tab and current_tab['filename']:
+            self.filename = current_tab['filename']
             self._save_to_file(self.filename)
         else:
             self.save_as()
             
     def save_as(self):
-        """Salva o arquivo com um novo nome"""
+        #Salva o arquivo com um novo nome - CORRIGIDO"""
         filename = filedialog.asksaveasfilename(
             initialfile='Untitled.txt',
             defaultextension='.txt',
@@ -98,25 +120,38 @@ class FileOperations:
         
         if filename:
             self._save_to_file(filename)
-            self.filename = filename
-            self._update_display()
+            # CORREÇÃO: Atualizar a aba atual com o novo filename
+            current_tab_id = self.app.tab_manager.current_tab
+            if current_tab_id:
+                self.app.tab_manager.update_tab_title(current_tab_id, filename, False)
             
     def _save_to_file(self, filename):
-        """Salva o conteúdo no arquivo especificado"""
+        #Salva o conteúdo no arquivo especificado - CORRIGIDO
         try:
-            content = self.app.get_text_content()
-            with open(filename, 'w', encoding='utf-8') as file:
-                file.write(content)
+            # CORREÇÃO: Obter conteúdo da aba atual
+            text_area = self.app.tab_manager.get_current_text_area()
+            if text_area:
+                content = text_area.get(1.0, tk.END)
                 
-            self.is_modified = False
-            self._update_display()
-            self.app.update_status(f'Saved: {os.path.basename(filename)}')
-            
+                with open(filename, 'w', encoding='utf-8') as file:
+                    file.write(content)
+                
+                # Atualiza o estado
+                self.filename = filename
+                self.is_modified = False
+                
+                # CORREÇÃO: Atualizar a aba atual
+                current_tab_id = self.app.tab_manager.current_tab
+                if current_tab_id:
+                    self.app.tab_manager.update_tab_title(current_tab_id, filename, False)
+                
+                self.app.update_status(f'Saved: {os.path.basename(filename)}')
+                
         except Exception as e:
             messagebox.showerror('Error', f'Could not save file: {e}')
             
     def _check_save(self):
-        """Verifica se deve salvar antes de proceder"""
+        #Verifica se deve salvar antes de proceder"""
         if self.is_modified:
             response = messagebox.askyesnocancel(
                 'Save Changes?',
@@ -131,6 +166,6 @@ class FileOperations:
         return True
         
     def exit_program(self):
-        """Fecha o programa"""
+        #Fecha o programa
         if self._check_save():
             self.app.root.quit()
