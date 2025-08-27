@@ -18,7 +18,7 @@ class MenuManager:
         self._create_help_menu(menubar)
         
     def _create_file_menu(self, menubar):
-        """Cria o menu Arquivo"""
+        #Cria o menu Arquivo
         file_menu = tk.Menu(menubar, tearoff=0)
         
         file_menu.add_command(
@@ -51,7 +51,7 @@ class MenuManager:
         menubar.add_cascade(label='File', menu=file_menu)
         
     def _create_edit_menu(self, menubar):
-        """Cria o menu Editar"""
+        #Cria o menu Editar
         edit_menu = tk.Menu(menubar, tearoff=0)
         
         edit_menu.add_command(
@@ -90,7 +90,7 @@ class MenuManager:
         menubar.add_cascade(label='Edit', menu=edit_menu)
         
     def _create_view_menu(self, menubar):
-        """Cria o menu Visualizar"""
+        #Cria o menu Visualizar
         view_menu = tk.Menu(menubar, tearoff=0)
         
         # Futuras implementações: temas, zoom, etc.
@@ -102,7 +102,7 @@ class MenuManager:
         menubar.add_cascade(label='View', menu=view_menu)
         
     def _create_help_menu(self, menubar):
-        """Cria o menu Ajuda"""
+        #Cria o menu Ajuda
         help_menu = tk.Menu(menubar, tearoff=0)
         
         help_menu.add_command(label='About MrNotepad', command=self._show_about)
@@ -112,40 +112,40 @@ class MenuManager:
         
     # Métodos de edição
     def _undo(self):
-        """Desfaz a última ação"""
+        #Desfaz a última ação
         try:
             self.app.text_editor.text_area.edit_undo()
         except tk.TclError:
             pass
             
     def _redo(self):
-        """Refaz a última ação"""
+        #Refaz a última ação
         try:
             self.app.text_editor.text_area.edit_redo()
         except tk.TclError:
             pass
             
     def _cut(self):
-        """Corta o texto selecionado"""
+        #Corta o texto selecionado"""
         if self.app.text_editor.has_selection():
             self.app.text_editor.text_area.event_generate('<<Cut>>')
             
     def _copy(self):
-        """Copia o texto selecionado"""
+        #Copia o texto selecionado
         if self.app.text_editor.has_selection():
             self.app.text_editor.text_area.event_generate('<<Copy>>')
             
     def _paste(self):
-        """Cola o texto da área de transferência"""
+        #Cola o texto da área de transferência
         self.app.text_editor.text_area.event_generate('<<Paste>>')
         
     def _select_all(self):
-        """Seleciona todo o texto"""
+        #Seleciona todo o texto
         self.app.text_editor.text_area.tag_add(tk.SEL, '1.0', tk.END)
         self.app.text_editor.text_area.mark_set(tk.INSERT, '1.0')
         
     def _show_about(self):
-        """Mostra informação sobre o programa"""
+        #Mostra informação sobre o programa
         messagebox.showinfo(
             'About MrNotepad',
             'MrNotepad\nVersion 1.0\nA simple text editor\nBuilt with Python and Tkinter'
