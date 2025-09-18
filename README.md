@@ -1,3 +1,8 @@
+
+<img width="1007" height="491" widght="331" alt="image" src="https://github.com/user-attachments/assets/9e56c188-07e6-4596-a106-78c74b4d5142" />
+
+
+
 <h1 align="center">
   :memo: MrNotepad - Simple Text Editor
 </h1>
