@@ -8,7 +8,7 @@ class EventHandler:
         self.setup_handlers()
         
     def setup_handlers(self):
-        #Configura e registra todos os handlers
+        """Configura e registra todos os handlers"""
         # Registra handlers no tab_manager
         self.app.tab_manager.add_bind_handler(self.bind_basic_events)
         self.app.tab_manager.add_bind_handler(self.bind_navigation_events)
@@ -19,7 +19,7 @@ class EventHandler:
         self.bind_global_events()
         
     def bind_global_events(self):
-        #Eventos globais da aplicação
+        """Eventos globais da aplicação"""
         # Bind para o notebook
         self.app.tab_manager.notebook.bind("<<NotebookTabChanged>>", self.on_tab_changed)
         
@@ -29,8 +29,12 @@ class EventHandler:
         self.app.root.bind('<Control-O>', lambda e: self.app.file_operations.open_file())
         self.app.root.bind('<Control-o>', lambda e: self.app.file_operations.open_file())
         
+        self.app.root.bind('<Control-b>', lambda e: self.app.sidebar.toggle_sidebar())
+        self.app.root.bind('<Control-B>', lambda e: self.app.sidebar.toggle_sidebar())
+
+
     def bind_basic_events(self, text_widget):
-        #Eventos básicos de texto
+        """Eventos básicos de texto"""
         # Modificação do texto
         text_widget.bind('<<Modified>>', self.on_text_modified)
         
@@ -40,7 +44,7 @@ class EventHandler:
         text_widget.bind('<B1-Motion>', self.on_cursor_move)
         
     def bind_navigation_events(self, text_widget):
-        #Eventos de navegação
+        """Eventos de navegação"""
         # Scroll
         text_widget.bind('<MouseWheel>', self.on_scroll)
         text_widget.bind('<Button-4>', self.on_scroll)
@@ -57,13 +61,13 @@ class EventHandler:
         text_widget.bind('<Button-3>', self.on_text_right_click)
         
     def bind_file_events(self, text_widget):
-        #Eventos de arquivo
+        """Eventos de arquivo"""
         # Salvamento
         text_widget.bind('<Control-s>', lambda e: self.app.file_operations.save_file())
         text_widget.bind('<Control-S>', lambda e: self.app.file_operations.save_as())
         
     def on_text_modified(self, event):
-        #Quando o texto é modificado - CORRIGIDO
+        """Quando o texto é modificado - CORRIGIDO"""
         text_widget = event.widget
         
         try:
@@ -84,12 +88,12 @@ class EventHandler:
             text_widget.edit_modified(False)
     
     def on_cursor_move(self, event):
-        #Quando o cursor se move
+        """Quando o cursor se move"""
         # Usa after para evitar atualizações muito frequentes
         self.app.root.after(100, self.app.tab_manager.update_status_bar)
         
     def on_scroll(self, event):
-        #Evento de scroll
+        """Evento de scroll"""
         # Atualiza status após scroll
         self.app.root.after(100, self.app.tab_manager.update_status_bar)
         
@@ -99,7 +103,7 @@ class EventHandler:
         self.app.tab_manager.update_status_bar()
         
     def select_all(self, event):
-        #Seleciona todo o texto"""
+        """Seleciona todo o texto"""
         try:
             event.widget.tag_add(tk.SEL, "1.0", tk.END)
             event.widget.mark_set(tk.INSERT, "1.0")
@@ -109,7 +113,7 @@ class EventHandler:
             return "break"
         
     def on_text_right_click(self, event):
-        #Menu de contexto no texto
+        """Menu de contexto no texto"""
         text_widget = event.widget
         
         try:
@@ -130,7 +134,7 @@ class EventHandler:
             pass
         
     def select_all_event(self, text_widget):
-        #Seleciona todo o texto para o menu de contexto
+        """Seleciona todo o texto para o menu de contexto"""
         try:
             text_widget.tag_add(tk.SEL, "1.0", tk.END)
             text_widget.mark_set(tk.INSERT, "1.0")
