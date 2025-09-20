@@ -8,6 +8,7 @@ class FileOperations:
         self.app = app
         self.filename = None
         self.is_modified = False
+        self.update_status= 'Waiting...'
         
     def set_modified(self, modified):
         #Define o estado de modificação do arquivo"""
@@ -77,6 +78,7 @@ class FileOperations:
         except UnicodeDecodeError:
             # Tenta abrir com encoding diferente
             try:
+                self.app.update_status('Trying to open with latin-1 encoding')
                 with open(filename, 'r', encoding='latin-1') as file:
                     content = file.read()
                 

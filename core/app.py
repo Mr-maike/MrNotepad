@@ -17,6 +17,7 @@ class MrNotepad:
         self.file_operations = FileOperations(self)
         self.menu_manager = MenuManager(self)
         self.event_handler = EventHandler(self)
+        self.status_bar = 'Waiting for next action...'  # Placeholder para status bar
         
     def setup_window(self):
         """Configura a janela principal - ATUALIZADO"""
@@ -28,3 +29,7 @@ class MrNotepad:
         self.root.grid_columnconfigure(0, weight=0)  # Sidebar (largura fixa)
         self.root.grid_columnconfigure(1, weight=1)  # Editor (expansível)
         self.root.grid_rowconfigure(0, weight=1)
+
+    def update_status(self, message):
+        # Atualiza a mensagem da barra de status do app
+        self.status_bar=message
