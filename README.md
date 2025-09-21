@@ -24,7 +24,7 @@ Richard Feynman famously said, "What I cannot create, I do not understand." Base
 
   - [Python](https://www.python.org)
   - [Tkinter](https://docs.python.org/3/library/tk.html)
-  - [ttkbootstrao](https://ttkbootstrap.readthedocs.io/en/latest/)
+  - [ttkbootstrap](https://ttkbootstrap.readthedocs.io/en/latest/)
   - [Pillow](https://pillow.readthedocs.io/en/stable/)
   - [PyTest](https://docs.pytest.org/en/stable/)
 
