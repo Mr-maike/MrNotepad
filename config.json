@@ -1,0 +1,24 @@
+{
+  "editor": {
+    "font_family": "Consolas",
+    "font_size": 12,
+    "word_wrap": true,
+    "highlight_current_line": true,
+    "show_line_numbers": true
+  },
+  "theme": {
+    "name": "darkly",
+    "background": "#2e2e2e",
+    "foreground": "#ffffff",
+    "accent_color": "#3498db"
+  },
+  "sidebar": {
+    "visible": true,
+    "width": 200,
+    "background": "#252526",
+    "foreground": "#cccccc"
+  },
+  "auto_save": false,
+  "auto_save_delay": 3000
+}
+
